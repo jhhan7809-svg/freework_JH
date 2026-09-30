@@ -260,7 +260,7 @@
                 }
             });
 
-            // 2. 라운드별 순위 및 우승자 계산
+            // 2. 라운드별 순위 및 우승자 계산 (동점자 처리 포함)
             rounds.forEach((round, rIndex) => {
                 let roundData = [];
                 players.forEach((player, pIndex) => {
@@ -280,20 +280,32 @@
 
                     // Net 스코어 오름차순 정렬 (Net 우승자 탐색)
                     roundData.sort((a, b) => a.net - b.net);
-                    const netWinner = roundData[0];
+                    const minNet = roundData[0].net;
+                    // 동점자(공동 Net 우승자) 처리
+                    const netWinners = roundData.filter(d => d.net === minNet).map(d => d.player).join(', ');
 
                     // Gross 스코어 오름차순 정렬 (메달리스트 탐색)
                     const grossSorted = [...roundData].sort((a, b) => a.gross - b.gross);
-                    const grossWinner = grossSorted[0];
+                    const minGross = grossSorted[0].gross;
+                    // 동점자(공동 Gross 메달리스트) 처리
+                    const grossWinners = grossSorted.filter(d => d.gross === minGross).map(d => d.player).join(', ');
 
-                    // 전체 순위 텍스트 생성
-                    const ranksText = roundData.map((d, i) => `${i + 1}위 ${d.player}(Net ${d.net})`).join(' | ');
+                    // 전체 순위 텍스트 생성 (공동 순위 반영)
+                    let currentRank = 1;
+                    let rankHtmlArr = [];
+                    for(let i = 0; i < roundData.length; i++) {
+                        if(i > 0 && roundData[i].net > roundData[i-1].net) {
+                            currentRank = i + 1;
+                        }
+                        rankHtmlArr.push(`${currentRank}위 ${roundData[i].player}(Net ${roundData[i].net})`);
+                    }
+                    const ranksText = rankHtmlArr.join(' | ');
 
                     let rankHtml = `
                         <div class="round-winner-card">
                             <p class="round-title">⛳ [${roundNames[rIndex]}] 우승자</p>
-                            <p>🏆 <strong>Net 챔피언 :</strong> ${netWinner.player} (Net ${netWinner.net}타)</p>
-                            <p>🥇 <strong>Gross 메달리스트 :</strong> ${grossWinner.player} (Gross ${grossWinner.gross}타)</p>
+                            <p>🏆 <strong>Net 챔피언 :</strong> ${netWinners} (Net ${minNet}타)</p>
+                            <p>🥇 <strong>Gross 메달리스트 :</strong> ${grossWinners} (Gross ${minGross}타)</p>
                             <p class="all-ranks"><strong>전체 순위:</strong> ${ranksText}</p>
                         </div>
                     `;
