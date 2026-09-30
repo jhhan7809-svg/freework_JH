@@ -2,849 +2,336 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⛳ 2026 후쿠오카 골프 & 시티 투어</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 후쿠오카 골프 & 시티 투어</title>
     <style>
-        :root {
-            --primary-color: #1b5e20;
-            --primary-light: #4c8c4a;
-            --secondary-color: #f5f7fa;
-            --accent-color: #d84315;
-            --text-color: #212121;
-            --border-color: #e0e0e0;
-            --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+        /* 기본 스타일 및 반응형 최적화 */
+        body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f9f9fc; color: #333; }
+        .header { background: #1e293b; color: #fff; padding: 15px; text-align: center; }
+        .header h2 { margin: 0; font-size: 1.4em; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+        /* 비짓재팬웹 강조 배너 */
+        .vjw-banner { background: #f97316; color: #fff; text-align: center; padding: 15px; font-weight: bold; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .vjw-banner a { color: #fff; text-decoration: underline; font-size: 1.1em; display: inline-block; margin-top: 5px;}
 
-        body {
-            background-color: #f0f4f1;
-            color: var(--text-color);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
+        /* 탭 내비게이션 */
+        .tabs { display: flex; background: #334155; }
+        .tab-btn { flex: 1; padding: 12px; text-align: center; color: #cbd5e1; cursor: pointer; border: none; background: none; font-size: 1em; font-weight: bold; }
+        .tab-btn.active { background: #3b82f6; color: white; }
 
-        /* Top Banner Header */
-        header {
-            background: linear-gradient(135deg, #1b5e20, #2e7d32);
-            color: white;
-            text-align: center;
-            padding: 24px 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
+        /* 탭 콘텐츠 */
+        .tab-content { display: none; padding: 20px; background: white; margin: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tab-content.active { display: block; }
+        h3 { color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin-top: 25px; }
+        h4 { color: #3b82f6; margin-bottom: 5px; }
+        ul { padding-left: 20px; margin-top: 5px; }
+        li { margin-bottom: 12px; }
 
-        header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 6px;
-        }
+        /* 스코어 테이블 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: center; font-size: 0.95em; }
+        th { background: #f1f5f9; font-weight: bold; }
+        input[type="number"] { width: 45px; padding: 5px; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px; }
+        input[type="text"].round-name { width: 60px; padding: 4px; text-align: center; font-weight: bold; border: 1px solid #cbd5e1; background: #fff; border-radius: 4px; font-size: 0.9em; }
+        .avg-cell { color: #2563eb; background: #f8fafc; }
 
-        header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
+        /* 순위 표시 영역 */
+        .ranking-box { margin-top: 20px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .ranking-box h4 { margin-top: 0; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px; }
 
-        /* Sticky Navigation Tabs */
-        nav.sticky-nav {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 1000;
-            display: flex;
-            overflow-x: auto;
-            border-bottom: 2px solid var(--primary-color);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-            white-space: nowrap;
-        }
+        /* 라운드별 우승자 강조 스타일 */
+        .round-winner-card { background: #eff6ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border: 1px solid #bfdbfe; }
+        .round-winner-card .round-title { margin: 0 0 8px 0; color: #1e40af; font-size: 1.05em; font-weight: bold; }
+        .round-winner-card p { margin: 4px 0; font-size: 0.95em; }
+        .round-winner-card .all-ranks { margin-top: 8px; font-size: 0.85em; color: #64748b; word-break: keep-all; }
 
-        nav.sticky-nav a {
-            flex: 1;
-            min-width: 80px;
-            text-align: center;
-            padding: 12px 10px;
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-        }
+        /* 출발 시간 강조 배지 */
+        .time-badge { display: inline-block; background-color: #d97706; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; margin-bottom: 4px; }
 
-        nav.sticky-nav a:hover, nav.sticky-nav a.active {
-            color: var(--primary-color);
-            background-color: #f9fbf9;
-            border-bottom-color: var(--primary-color);
-        }
+        /* 저장 버튼 */
+        .save-btn { display: block; width: 100%; padding: 15px; background: #3b82f6; color: white; text-align: center; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; margin-top: 20px; cursor: pointer; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3); }
+        .save-btn:active { background: #2563eb; }
 
-        /* Container & Cards */
-        .container {
-            max-width: 900px;
-            margin: 16px auto;
-            padding: 0 12px;
-        }
+        /* 링크 스타일 */
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-        }
-
-        /* Tab Content Control */
-        .section-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .section-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid #e8f5e9;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Info Grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-        }
-
-        .info-box {
-            background-color: #f9fbe7;
-            border-left: 4px solid #c0ca33;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-
-        /* Visit Japan Web Banner */
-        .vjw-banner {
-            background-color: #ff9800;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            font-weight: bold;
-        }
-
-        .vjw-banner a {
-            color: white;
-            text-decoration: underline;
-            font-size: 1.1rem;
-        }
-
-        /* Tables */
-        .table-wrapper {
-            overflow-x: auto;
-            margin-top: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        th, td {
-            padding: 10px 4px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: #e8f5e9;
-            color: var(--primary-color);
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        /* Timeline Items */
-        .timeline-item {
-            border-left: 3px solid var(--primary-color);
-            padding-left: 16px;
-            margin-left: 8px;
-            margin-bottom: 16px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -7px;
-            top: 4px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-        }
-
-        .timeline-time {
-            font-weight: bold;
-            color: var(--accent-color);
-            font-size: 0.85rem;
-        }
-
-        /* Input Controls */
-        input[type="number"], input[type="text"] {
-            width: 100%;
-            max-width: 60px;
-            padding: 6px 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-
-        .btn-link {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.75rem;
-        }
-
-        .btn-link:hover {
-            background-color: var(--primary-light);
-        }
-
-        .receipt-btn {
-            font-size: 0.75rem;
-            padding: 4px 6px;
-            background: #eee;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .action-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 10px;
-        }
-
-        .action-btn:hover { background-color: var(--primary-light); }
-
-        .del-btn {
-            background-color: #d84315;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-        }
-
-        /* Place Cards */
-        .place-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-            background-color: #fbfbfb;
-        }
-
-        .place-title {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 4px;
-        }
-
-        /* Score Detailed Input */
-        .score-cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-        }
-        .detail-btn {
-            background: #e0e0e0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            padding: 4px;
-            font-size: 0.8rem;
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #888;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
-        .hole-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .hole-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f5f5f5;
-            padding: 8px;
-            border-radius: 6px;
-        }
-        .hole-item span {
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-        .hole-item input {
-            width: 45px;
-            padding: 4px;
-        }
-
-        /* Comment Box Styles */
-        .comment-section {
-            margin-top: 20px;
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        .comment-box {
-            width: 100%;
-            min-height: 100px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-family: inherit;
-            resize: vertical;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #777;
-            margin-top: 30px;
-        }
-
-        /* 모바일 반응형 최적화 (Mobile Responsiveness) */
+        /* 모바일 화면 최적화 */
         @media (max-width: 600px) {
-            header { padding: 16px 12px; }
-            header h1 { font-size: 1.25rem; }
-            header p { font-size: 0.8rem; }
-            .card { padding: 15px; margin-bottom: 15px; }
-            .card-title { font-size: 1.1rem; }
-            .info-grid { grid-template-columns: 1fr; }
-            th, td { padding: 6px 2px; font-size: 0.75rem; }
-            input[type="number"], input[type="text"] { font-size: 0.75rem; padding: 4px 2px; }
-            .vjw-banner { font-size: 0.95rem; padding: 12px; }
-            .vjw-banner a { font-size: 1rem; }
-            .hole-grid { grid-template-columns: 1fr; }
-            .action-btn { font-size: 0.8rem; padding: 6px 10px; width: 100%; }
-            nav.sticky-nav a { padding: 10px 8px; font-size: 0.8rem; }
-            .detail-btn { padding: 2px; font-size: 0.7rem; }
+            .tab-btn { font-size: 0.85em; padding: 10px 0; }
+            .tab-content { padding: 15px 10px; margin: 10px; }
+            th, td { padding: 5px 2px; font-size: 0.8em; }
+            input[type="number"] { width: 35px; }
+            input[type="text"].round-name { width: 45px; font-size: 0.75em; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Header -->
-    <header>
-        <h1>⛳ 2026 후쿠오카 골프 & 시티 투어</h1>
-        <p>2026.10.02 (금) ~ 10.05 (월) [3박 4일 | 7명 2팀]</p>
-    </header>
-
-    <!-- Navigation Tabs -->
-    <nav class="sticky-nav">
-        <a href="#overview" class="active">📌 개요</a>
-        <a href="#schedule">📅 일정</a>
-        <a href="#directory">🏨 숙소&골프장</a>
-        <a href="#places">🍱 맛집/관광</a>
-        <a href="#scoreboard">📊 스코어</a>
-        <a href="#expenses">💰 경비관리</a>
-    </nav>
-
-    <div class="container">
-
-        <!-- 1. Overview Section -->
-        <section id="overview" class="card section-content active">
-
-            <!-- 비짓재팬웹 강조 배너 -->
-            <div class="vjw-banner">
-                📢 일본 입국 필수 준비! <br>
-                <a href="https://www.vjw.digital.go.jp/" target="_blank">👉 비짓재팬웹 (Visit Japan Web) 작성하기 👈</a>
-            </div>
-
-            <h2 class="card-title">📌 투어 개요 및 핵심 안내</h2>
-            <div class="info-grid">
-                <div class="info-box">
-                    <strong>✈️ 출국/입국 항공편</strong><br>
-                    • 출발: 10/02(금) 06:00 인천공항 (제주:T1, 진에어:T2)<br>
-                    • 도착: 10/02(금) 08:00 후쿠오카 공항<br>
-                    • 귀국: 10/05(월) 19:30 후쿠오카 출발
-                </div>
-                <div class="info-box">
-                    <strong>🚗 렌트카 및 숙소</strong><br>
-                    • 렌트카: 공항 2분 거리 (무료 셔틀 가능)<br>
-                    • 거점 숙소: 벳부 키타하마 온천 숙소<br>
-                    • T. +81-70-3515-1094
-                </div>
-                 <div class="info-box" style="grid-column: 1 / -1;">
-                    <strong>👥 항공편별 이동 인원</strong><br>
-                    <strong>[가는 편 : 10/02 (금)]</strong><br>
-                    • 제주항공: 원석, 종희, 선우, 영규, 지윤<br>
-                    • 진에어: 호준, 동민<br>
-                    <br>
-                    <strong>[오는 편 : 10/05 (월)]</strong><br>
-                    • 제주항공: 원석, 종희, 선우, 영규<br>
-                    • 진에어: 호준, 동민, 지윤
-                </div>
-            </div>
-
-            <h3 style="margin-top:16px; font-size:1rem; color:#333; text-align:left;">🗺️ 라운드 한눈에 보기</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>라운드</th>
-                            <th>일자</th>
-                            <th>골프장명</th>
-                            <th>티오프</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>ROUND 1</td><td>10/02 (금)</td><td>사가 컨트리 클럽</td><td>11:23 / 11:30</td></tr>
-                        <tr><td>ROUND 2</td><td>10/03 (토)</td><td>벳부 골프 클럽 (PGM)</td><td>09:17 / 09:24</td></tr>
-                        <tr><td>ROUND 3</td><td>10/04 (일)</td><td>유후 고원 골프 클럽</td><td>10:06 / 10:34</td></tr>
-                        <tr><td>ROUND 4</td><td>10/05 (월)</td><td>로렐히타 컨트리 클럽</td><td>09:17 / 09:24</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- 2. Schedule Section -->
-        <section id="schedule" class="card section-content">
-            <h2 class="card-title">📅 일자별 상세 일정</h2>
-
-            <h3 style="color:var(--primary-color); margin-bottom:8px;">🟢 DAY 1 | 10월 2일 (금) : 입국 & 사가 CC</h3>
-            <div class="timeline-item"><span class="timeline-time">06:00</span> 인천공항 출국 (제주항공 T1 / 진에어 T2)</div>
-            <div class="timeline-item"><span class="timeline-time">08:00</span> 후쿠오카 공항 도착 후 렌트카 수령 (09:00)</div>
-            <div class="timeline-item"><span class="timeline-time">09:30</span> 후발주자 픽업 후 사가 CC 이동</div>
-            <div class="timeline-item"><span class="timeline-time">11:23</span> ⛳ 사가 CC 라운드 (1조 11:23 / 2조 11:30)</div>
-            <div class="timeline-item"><span class="timeline-time">18:00</span> 벳부 숙소 체크인 및 로바타야키 만찬</div>
-
-            <h3 style="color:var(--primary-color); margin: 16px 0 8px 0;">🔵 DAY 2 | 10월 3일 (토) : 벳부 GC & 온천 관광</h3>
-            <div class="timeline-item"><span class="timeline-time">09:17</span> ⛳ 벳부 GC 라운드 (1조 OUT 09:17 / 2조 IN 09:24)</div>
-            <div class="timeline-item"><span class="timeline-time">15:00</span> 벳부 지옥온천 순례 (우미지코쿠) 및 온천욕</div>
-            <div class="timeline-item"><span class="timeline-time">18:00</span> 지옥찜 요리 or 카메쇼 회전초밥 만찬</div>
-
-            <h3 style="color:var(--primary-color); margin: 16px 0 8px 0;">🟡 DAY 3 | 10월 4일 (일) : 유후 고원 GC & 유후인</h3>
-            <div class="timeline-item"><span class="timeline-time">10:06</span> ⛳ 유후 고원 GC 라운드 (1조 10:06 / 2조 10:34)</div>
-            <div class="timeline-item"><span class="timeline-time">16:00</span> 유후인 긴린코 호수 & 유노츠보 거리 탐방</div>
-            <div class="timeline-item"><span class="timeline-time">18:00</span> 유후마부시 신 분고규/장어 덮밥 저녁 식사</div>
-
-            <h3 style="color:var(--primary-color); margin: 16px 0 8px 0;">🔴 DAY 4 | 10월 5일 (월) : 로렐히타 CC & 귀국</h3>
-            <div class="timeline-item"><span class="timeline-time">09:17</span> ⛳ 로렐히타 CC 라운드 (1조 09:17 / 2조 09:24)</div>
-            <div class="timeline-item"><span class="timeline-time">15:00</span> 히타 마메다마치 거리 관광 및 히타 장어덮밥</div>
-            <div class="timeline-item"><span class="timeline-time">17:30</span> 렌트카 반납 후 셔틀로 공항 이동</div>
-            <div class="timeline-item"><span class="timeline-time">19:30</span> ✈️ 후쿠오카 공항 출발 (인천 귀국)</div>
-        </section>
-
-        <!-- 3. Directory Section -->
-        <section id="directory" class="card section-content">
-            <h2 class="card-title">🏨 숙소 & 골프장 디렉토리</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>명칭</th>
-                            <th>난이도</th>
-                            <th>주요 특징 및 공략법</th>
-                            <th>웹사이트</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>사가 CC</strong></td>
-                            <td>⭐⭐⭐</td>
-                            <td style="text-align:left;">완만한 구릉 코스, 넓은 페어웨이로 드라이버 난사 부담 적음</td>
-                            <td><a href="https://www.saga-cc.com/" target="_blank" class="btn-link">홈페이지</a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>벳부 GC</strong></td>
-                            <td>⭐⭐⭐⭐</td>
-                            <td style="text-align:left;">1930년 개장 역사의 PGM 코스. 해발 600m 산악 바람 조심</td>
-                            <td><a href="https://booking.pacificgolf.co.jp/guide/133.html?wovn=ko" target="_blank" class="btn-link">예약안내</a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>유후 고원 GC</strong></td>
-                            <td>⭐⭐⭐</td>
-                            <td style="text-align:left;">해발 800m 고원 코스. 공기 저항이 적어 비거리 상승 효과</td>
-                            <td><a href="http://yufukogen-gc.com/" target="_blank" class="btn-link">홈페이지</a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>로렐히타 CC</strong></td>
-                            <td>⭐⭐⭐⭐</td>
-                            <td style="text-align:left;">울창한 삼나무 숲, 그린 브레이크가 심해 언듈레이션 파악 필수</td>
-                            <td><a href="http://www.hita-golf.com/laurel/" target="_blank" class="btn-link">홈페이지</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top:12px; font-size:0.85rem; background:#f5f5f5; padding:10px; border-radius:6px;">
-                <strong>🏡 숙소 안내:</strong> Oita Beppu Kitahama 2-7-22 (T. +81-70-3515-1094)
-            </div>
-        </section>
-
-        <!-- 4. Places Section -->
-        <section id="places" class="card section-content">
-            <h2 class="card-title">🍱 골프장 주변 맛집 & 관광 명소</h2>
-
-            <div class="place-card">
-                <div class="place-title">🍜 [1일차] 사가 / 벳부 지역</div>
-                <p>• <strong>사가 드라이브인 토리 (Drive-in Tori)</strong>: 사가 명물 닭고기 구이 및 도리메시 정식</p>
-                <p>• <strong>벳부 로바타야키 렌 (Robata Ren)</strong>: 싱싱한 분고 해산물 화로구이 및 이자카야</p>
-            </div>
-
-            <div class="place-card">
-                <div class="place-title">♨️ [2일차] 벳부 온천 & 스시</div>
-                <p>• <strong>우미지코쿠 (바다지옥)</strong>: 코발트 블루빛 온천수와 온천 달걀 명물</p>
-                <p>• <strong>카메쇼 크루즈 스시 (Kamesho)</strong>: 벳부 최강 네타 크기의 카메쇼 회전초밥</p>
-            </div>
-
-            <div class="place-card">
-                <div class="place-title">🍡 [3일차] 유후인 고원 & 덮밥</div>
-                <p>• <strong>유후마부시 신 (Yufumabushi Shin)</strong>: 분고규(소고기) 및 장어 돌솥 덮밥</p>
-                <p>• <strong>긴린코 호수 & 유노츠보 거리</strong>: 물안개가 피어오르는 유후인 대표 호수산책로</p>
-            </div>
-
-            <div class="place-card">
-                <div class="place-title">🍱 [4일차] 히타 마메다마치</div>
-                <p>• <strong>히타 센야 (Hita Senya)</strong>: 규슈 3대 장어덮밥(히츠마부시) 전문점</p>
-                <p>• <strong>마메다마치 거리</strong>: 규슈의 작은 교토라 불리는 전통 거리 산책</p>
-            </div>
-        </section>
-
-        <!-- 5. Scoreboard Section -->
-        <section id="scoreboard" class="card section-content">
-            <h2 class="card-title">📊 라이브 스코어보드 (상세입력)</h2>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">* 각 칸에 직접 타수를 입력하거나 [📝] 버튼을 눌러 홀별 상세 스코어를 기록하세요.</p>
-
-            <div class="table-wrapper">
-                <table id="scoreTable">
-                    <thead>
-                        <tr>
-                            <th>선수명</th>
-                            <th>H'cp</th>
-                            <th>R1</th>
-                            <th>R2</th>
-                            <th>R3</th>
-                            <th>R4</th>
-                            <th>Gross</th>
-                            <th>Net</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scoreTbody">
-                        <!-- JS에서 동적 생성됨 -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- 6. Expenses Section -->
-        <section id="expenses" class="card section-content">
-            <h2 class="card-title">💰 경비 관리 및 메모</h2>
-
-            <div class="table-wrapper">
-                <table id="expenseTable">
-                    <thead>
-                        <tr>
-                            <th>일자</th>
-                            <th>항목</th>
-                            <th>금액</th>
-                            <th>영수증</th>
-                            <th>정산</th>
-                            <th>삭제</th>
-                        </tr>
-                    </thead>
-                    <tbody id="expenseTbody">
-                        <tr>
-                            <td><input type="text" value="10/02"></td>
-                            <td><input type="text" value="렌트카/기름" style="width:70px;"></td>
-                            <td><input type="text" value="¥45,000"></td>
-                            <td><input type="file" accept="image/*" id="r1" style="display:none;"><button class="receipt-btn" onclick="document.getElementById('r1').click()">📷</button></td>
-                            <td><input type="checkbox"></td>
-                            <td><button class="del-btn" onclick="deleteExpenseRow(this)">❌</button></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" value="10/02"></td>
-                            <td><input type="text" value="사가 CC" style="width:70px;"></td>
-                            <td><input type="text" value="¥84,000"></td>
-                            <td><input type="file" accept="image/*" id="r2" style="display:none;"><button class="receipt-btn" onclick="document.getElementById('r2').click()">📷</button></td>
-                            <td><input type="checkbox" checked></td>
-                            <td><button class="del-btn" onclick="deleteExpenseRow(this)">❌</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button class="action-btn" onclick="addExpenseRow()">➕ 새 항목 추가</button>
-            </div>
-
-            <!-- 메모/코멘트 란 -->
-            <div class="comment-section">
-                <h3 style="font-size:1rem; margin-bottom:8px; color:var(--primary-color);">📝 메모 및 코멘트</h3>
-                <textarea id="tripComments" class="comment-box" placeholder="정산 관련 메모나 기타 여행 코멘트를 자유롭게 작성하세요..."></textarea>
-                <button class="action-btn" onclick="saveComments()">💾 코멘트 저장하기</button>
-            </div>
-        </section>
-
-        <footer>
-            <p>⛳ 2026 후쿠오카 골프 & 시티 투어 | 7인 모바일 가이드</p>
-        </footer>
-
+    <div class="header">
+        <h2>⛳ 2026 후쿠오카 골프 & 시티 투어</h2>
     </div>
 
-    <!-- 상세 스코어 모달 -->
-    <div id="holeModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeHoleModal()">&times;</button>
-            <h3 id="modalTitle" style="color:var(--primary-color); border-bottom:2px solid #eee; padding-bottom:10px;">상세 스코어</h3>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('overview')">📌 개요 & 간편일정</button>
+        <button class="tab-btn" onclick="openTab('places')">🏨 숙소&골프</button>
+        <button class="tab-btn" onclick="openTab('score')">🏌️ 스코어</button>
+    </div>
 
-            <div class="hole-grid" id="holeInputs">
-                <!-- JS에서 홀 1~18 인풋 자동 생성 -->
-            </div>
-
-            <button class="action-btn" style="width:100%; margin-top:10px;" onclick="saveHoleScore()">💾 총 타수 저장하기</button>
+    <!-- 1. 개요 & 간편일정 탭 -->
+    <div id="overview" class="tab-content active">
+        <div class="vjw-banner">
+            🚨 일본 입국 필수! 미리 작성하세요 🚨<br>
+            <a href="https://www.vjw.digital.go.jp/" target="_blank">👉 비짓재팬웹(Visit Japan Web) 바로가기</a>
         </div>
+
+        <h3>여행 기본 정보</h3>
+        <p><strong>🗓 일정:</strong> 2026년 10월 2일(금) ~ 10월 5일(월), 3박 4일</p>
+        <p><strong>👥 인원:</strong> 총 8명 (원석, 종희, 선우, 영규, 지윤, 호준, 동민, 현주)</p>
+
+        <h3>✈️ 항공편 및 이동 인원</h3>
+        <h4>출발편 (10/2일 금)</h4>
+        <ul>
+            <li><strong>제주항공:</strong> 원석, 종희, 선우, 영규, 지윤, 현주 (6명)</li>
+            <li><strong>진에어:</strong> 호준, 동민 (2명)</li>
+        </ul>
+        <h4>귀국편 (10/5일 월)</h4>
+        <ul>
+            <li><strong>제주항공:</strong> 원석, 종희, 선우, 영규 (4명)</li>
+            <li><strong>진에어:</strong> 호준, 동민, 지윤, 현주 (4명)</li>
+        </ul>
+
+        <h3>🗓 상세 일정</h3>
+        <ul>
+            <li><strong>1일차 (10/2):</strong> 공항 렌터카 인수 → <b>센트럴 후쿠오카 GC</b> (11:23/11:30) → 벳부 숙소 체크인</li>
+            <li><strong>2일차 (10/3):</strong> <b>벳부 GC</b> 라운딩 → 벳부 인근 자유 관광</li>
+            <li><strong>3일차 (10/4):</strong> <b>유후 고원 GC</b> 라운딩 → 유후인 등 자유 시간</li>
+            <li><strong>4일차 (10/5):</strong> <b>로렐히타 CC</b> 라운딩 → 공항 렌터카 반납 → 귀국</li>
+        </ul>
     </div>
 
-    <!-- Script for Tabs & Calculations -->
+    <!-- 2. 숙소&골프장 탭 -->
+    <div id="places" class="tab-content">
+        <h3>🏨 숙소 정보</h3>
+        <p>📍 <strong>위치:</strong> 일본 오이타현 벳푸시 키타하마 2-7-22 (<a href="https://maps.app.goo.gl/yVRJJnU97YefSZCh9" target="_blank">구글 지도</a>)</p>
+        <p>⏰ <strong>체크인:</strong> 2026년 10월 2일 오후 4시 이후</p>
+        <p>🏠 <strong>숙소 특징:</strong> 대형 상업 시설 "도키 벳푸 스토어" 뒤쪽 거리. 유리문 3개가 있는 목조 건물 (2층 벽에 큰 화살표 "→" 랜드마크)</p>
+
+        <h4>🚗 주차 안내 (필독)</h4>
+        <ul>
+            <li><strong>숙소 앞 정차:</strong> 일방통행 도로. 짐을 내리거나 싣기 위한 <b>임시 주정차만 가능</b> (절대 주차 금지)</li>
+            <li><strong>제1주차장 (무료 1대):</strong> 숙소에서 도보 1분 거리. 뒤쪽에서 세 번째(중간) 자리. 대형 차량은 주차가 다소 어려울 수 있음. (<a href="https://maps.app.goo.gl/pg7sjNegmMRXqpkcA?g_st=ic" target="_blank">위치 보기</a>)</li>
+            <li><strong>지정 유료 주차장 (2번째 차량):</strong> 벳푸 타워 2차 주차장 (1시간 100엔, 최대 12시간 400엔). 도보 4분 거리. (<a href="https://maps.app.goo.gl/EnG8MoWN8TBwvj2Z8" target="_blank">위치 보기</a>)<br>
+            <small>※ 체크인 30분 전 ~ 체크아웃 30분 사이에 사용해 주세요. 영수증을 보내주시면 결제 처리해 드립니다.</small></li>
+        </ul>
+
+        <h4>🧴 어메니티 안내 (1인당)</h4>
+        <ul>
+            <li><strong>온천 지참용 (테이크아웃 가능):</strong> 칫솔, 바디 타월, 핸드 타월 (※ 샴푸, 린스, 바디샴푸 3종 세트 2개 추가 제공)</li>
+            <li><strong>숙소 전용 (테이크아웃 불가):</strong> 얼굴 수건, 목욕 수건 (※ 연박 시 숙소 내 세탁기 및 건조기 이용, 2박 이상 2세트 제공)</li>
+        </ul>
+
+        <h3>⛳ 골프장 디렉토리</h3>
+        <ul>
+            <li><strong>1일차: 센트럴 후쿠오카 골프클럽</strong> (<a href="https://www.google.com/maps/search/?api=1&query=Central+Fukuoka+Golf+Club" target="_blank">📍위치 보기</a>)<br>
+                <span class="time-badge">⏰ 티오프 11:30~12:00</span><br>
+                <small>- 삼나무와 벚나무가 어우러진 경치 좋은 18홀 구릉 코스. 연못 너머의 명물 16번 홀 공략 주의.</small>
+            </li>
+            <li><strong>2일차: 벳부 골프클럽</strong> (<a href="https://www.google.com/maps/search/?api=1&query=Beppu+Golf+Club" target="_blank">📍위치 보기</a>)<br>
+                <span class="time-badge">⏰ 8시 출발</span><br>
+                <small>- 1930년에 개장한 규슈에서 두 번째로 오래된 유서 깊은 명문 코스. 자연 지형을 살린 다이내믹한 레이아웃이 매력적.</small>
+            </li>
+            <li><strong>3일차: 유후 고원 골프클럽</strong> (<a href="https://www.google.com/maps/search/?api=1&query=Yufu+Kogen+Golf+Club" target="_blank">📍위치 보기</a>)<br>
+                <span class="time-badge">⏰ 8시 30분 출발</span><br>
+                <small>- 웅장한 유후다케 산기슭에 위치한 아름다운 리조트 코스. 적절한 언듈레이션으로 전략적인 플레이가 요구됨.</small>
+            </li>
+            <li><strong>4일차: 로렐히타 컨트리클럽</strong> (<a href="https://www.google.com/maps/search/?api=1&query=Laurel+Hita+Country+Club" target="_blank">📍위치 보기</a>)<br>
+                <span class="time-badge">⏰ 7시 20분 출발</span><br>
+                <small>- 아름다운 히타 분지를 내려다보는 탁 트인 전망이 일품인 구장. 섬세한 샷이 필요한 다채로운 홀 구성.</small>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 3. 스코어보드 탭 -->
+    <div id="score" class="tab-content">
+        <h3>스코어보드</h3>
+        <p><small>💡 라운드별 스코어를 입력하면 표 상단에 실시간 순위(Net 스코어 기준)가 나타납니다. 작성 후 <b>저장하기</b>를 누르면 기록이 유지됩니다.</small></p>
+
+        <div id="rankingContainer" class="ranking-box">
+            <!-- 자바스크립트로 순위가 이곳에 표시됨 -->
+        </div>
+
+        <table id="scoreTable">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>Hcp</th>
+                    <!-- 라운드명 직접 수정 가능하게 변경 -->
+                    <th><input type="text" class="round-name" id="name_r1" value="1라운드" oninput="calculateRankings()"></th>
+                    <th><input type="text" class="round-name" id="name_r2" value="2라운드" oninput="calculateRankings()"></th>
+                    <th><input type="text" class="round-name" id="name_r3" value="3라운드" oninput="calculateRankings()"></th>
+                    <th><input type="text" class="round-name" id="name_r4" value="4라운드" oninput="calculateRankings()"></th>
+                    <th>평균</th>
+                </tr>
+            </thead>
+            <tbody id="scoreBody">
+                <!-- Javascript로 동적 생성됨 -->
+            </tbody>
+        </table>
+
+        <button class="save-btn" onclick="saveScores()">💾 현재 스코어 내 폰에 저장하기</button>
+    </div>
+
     <script>
-        // 전역 메모리: 플레이어별/라운드별 홀 스코어 저장 객체
-        let detailedScores = {};
-        let currentPIdx = null;
-        let currentRIdx = null;
+        // 탭 전환 기능
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-        // 1. 초기 탭, 스코어보드, 코멘트 불러오기
-        document.addEventListener('DOMContentLoaded', () => {
-            // 탭 클릭 이벤트
-            const navLinks = document.querySelectorAll('nav.sticky-nav a');
-            const sections = document.querySelectorAll('.section-content');
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    sections.forEach(sec => sec.classList.remove('active'));
-                    this.classList.add('active');
-                    const targetId = this.getAttribute('href').substring(1);
-                    document.getElementById(targetId).classList.add('active');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+        // 스코어보드 기능
+        const players = ['원석', '종희', '선우', '영규', '지윤', '호준', '동민', '현주'];
+        const tbody = document.getElementById('scoreBody');
+        const STORAGE_KEY = 'fukuokaTourScores';
+
+        // 테이블 그리기 (저장된 데이터 불러오기 포함)
+        function renderTable() {
+            const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+            // 저장된 라운드명 불러오기
+            if (savedData.roundNames) {
+                document.getElementById('name_r1').value = savedData.roundNames.r1 || '1라운드';
+                document.getElementById('name_r2').value = savedData.roundNames.r2 || '2라운드';
+                document.getElementById('name_r3').value = savedData.roundNames.r3 || '3라운드';
+                document.getElementById('name_r4').value = savedData.roundNames.r4 || '4라운드';
+            }
+
+            players.forEach((player, index) => {
+                const data = savedData[player] || { hcp: '', r1: '', r2: '', r3: '', r4: '' };
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${player}</strong></td>
+                    <td><input type="number" id="hcp_${index}" value="${data.hcp}" oninput="calculateRankings()"></td>
+                    <td><input type="number" id="r1_${index}" value="${data.r1}" oninput="calculateRankings()"></td>
+                    <td><input type="number" id="r2_${index}" value="${data.r2}" oninput="calculateRankings()"></td>
+                    <td><input type="number" id="r3_${index}" value="${data.r3}" oninput="calculateRankings()"></td>
+                    <td><input type="number" id="r4_${index}" value="${data.r4}" oninput="calculateRankings()"></td>
+                    <td id="avg_${index}" class="avg-cell">-</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            calculateRankings();
+        }
+
+        // 순위 계산, 평균 타수 계산 및 렌더링 함수
+        function calculateRankings() {
+            const container = document.getElementById('rankingContainer');
+            container.innerHTML = '<h4>🏆 라운드별 우승자 및 순위 (핸디캡 적용)</h4>';
+
+            const rounds = ['r1', 'r2', 'r3', 'r4'];
+            const roundNames = [
+                document.getElementById('name_r1').value || '1라운드',
+                document.getElementById('name_r2').value || '2라운드',
+                document.getElementById('name_r3').value || '3라운드',
+                document.getElementById('name_r4').value || '4라운드'
+            ];
+            let hasAnyData = false;
+
+            // 1. 개인별 평균 타수(Gross 기준) 업데이트
+            players.forEach((player, pIndex) => {
+                let totalGross = 0;
+                let playedRounds = 0;
+                rounds.forEach(round => {
+                    const scoreInput = document.getElementById(`${round}_${pIndex}`).value;
+                    if (scoreInput) {
+                        totalGross += parseFloat(scoreInput);
+                        playedRounds++;
+                    }
                 });
-            });
 
-            // 스코어보드 테이블 동적 생성 (7인)
-            const scoreTbody = document.getElementById('scoreTbody');
-            let tableHTML = '';
-            for(let i=1; i<=7; i++){
-                tableHTML += `
-                    <tr>
-                        <td><input type="text" id="p${i}_name" value="선수 ${i}" style="width:55px;"></td>
-                        <td><input type="number" class="hcp" value="${(i-1)*2}" onchange="calcScore()" style="width:40px;"></td>
-                `;
-                for(let r=1; r<=4; r++){
-                    tableHTML += `
-                        <td>
-                            <div class="score-cell">
-                                <input type="number" class="r${r} score" id="p${i}_r${r}" value="88" onchange="calcScore()" style="width:40px;">
-                                <button class="detail-btn" onclick="openHoleModal(${i}, ${r})" title="상세스코어">📝</button>
-                            </div>
-                        </td>
-                    `;
+                const avgCell = document.getElementById(`avg_${pIndex}`);
+                if (playedRounds > 0) {
+                    avgCell.innerHTML = `<strong>${(totalGross / playedRounds).toFixed(1)}</strong>`;
+                } else {
+                    avgCell.innerHTML = '-';
                 }
-                tableHTML += `
-                        <td class="gross" style="font-weight:bold; color:var(--accent-color);">0</td>
-                        <td class="net" style="font-weight:bold; color:var(--primary-color);">0</td>
-                    </tr>
-                `;
-            }
-            scoreTbody.innerHTML = tableHTML;
-            calcScore();
-
-            // 저장된 코멘트 불러오기
-            loadComments();
-        });
-
-        // 2. 메인 스코어 계산 로직 (Gross / Net)
-        function calcScore() {
-            const rows = document.querySelectorAll("#scoreTable tbody tr");
-            rows.forEach(row => {
-                const hcp = parseInt(row.querySelector(".hcp").value) || 0;
-                const r1 = parseInt(row.querySelector(".r1").value) || 0;
-                const r2 = parseInt(row.querySelector(".r2").value) || 0;
-                const r3 = parseInt(row.querySelector(".r3").value) || 0;
-                const r4 = parseInt(row.querySelector(".r4").value) || 0;
-
-                const gross = r1 + r2 + r3 + r4;
-                const net = gross - hcp;
-
-                row.querySelector(".gross").innerText = gross;
-                row.querySelector(".net").innerText = net;
             });
-        }
 
-        // 3. 상세 스코어(홀별) 모달 열기
-        function openHoleModal(pIdx, rIdx) {
-            currentPIdx = pIdx;
-            currentRIdx = rIdx;
-            const pName = document.getElementById(`p${pIdx}_name`).value;
-            document.getElementById('modalTitle').innerText = `${pName} - R${rIdx} 상세 스코어`;
+            // 2. 라운드별 순위 및 우승자 계산
+            rounds.forEach((round, rIndex) => {
+                let roundData = [];
+                players.forEach((player, pIndex) => {
+                    const hcpInput = document.getElementById(`hcp_${pIndex}`).value;
+                    const scoreInput = document.getElementById(`${round}_${pIndex}`).value;
 
-            // 기록된 데이터가 없으면 빈 배열 생성
-            const key = `p${pIdx}_r${rIdx}`;
-            if(!detailedScores[key]) {
-                detailedScores[key] = Array(18).fill('');
-            }
-            const holes = detailedScores[key];
+                    if (scoreInput) { 
+                        const hcp = parseFloat(hcpInput) || 0;
+                        const gross = parseFloat(scoreInput);
+                        const net = gross - hcp;
+                        roundData.push({ player, gross, net });
+                    }
+                });
 
-            let html = '';
-            for(let i=0; i<18; i++){
-                html += `
-                    <div class="hole-item">
-                        <span>Hole ${i+1}</span>
-                        <input type="number" id="hole_${i}" value="${holes[i]}" min="1" max="15" placeholder="타수">
-                    </div>
-                `;
-            }
-            document.getElementById('holeInputs').innerHTML = html;
-            document.getElementById('holeModal').style.display = 'flex';
-        }
+                if (roundData.length > 0) {
+                    hasAnyData = true;
 
-        // 4. 모달 닫기
-        function closeHoleModal() {
-            document.getElementById('holeModal').style.display = 'none';
-        }
+                    // Net 스코어 오름차순 정렬 (Net 우승자 탐색)
+                    roundData.sort((a, b) => a.net - b.net);
+                    const netWinner = roundData[0];
 
-        // 5. 홀별 타수 합산하여 저장하기
-        function saveHoleScore() {
-            let total = 0;
-            let holes = [];
-            for(let i=0; i<18; i++){
-                let val = parseInt(document.getElementById(`hole_${i}`).value);
-                if(isNaN(val)) val = 0;
-                holes.push(val === 0 ? '' : val);
-                total += val;
-            }
+                    // Gross 스코어 오름차순 정렬 (메달리스트 탐색)
+                    const grossSorted = [...roundData].sort((a, b) => a.gross - b.gross);
+                    const grossWinner = grossSorted[0];
 
-            // 전역 변수에 저장
-            detailedScores[`p${currentPIdx}_r${currentRIdx}`] = holes;
+                    // 전체 순위 텍스트 생성
+                    const ranksText = roundData.map((d, i) => `${i + 1}위 ${d.player}(Net ${d.net})`).join(' | ');
 
-            // 메인 테이블의 해당 라운드 인풋창에 합계 타수 반영 (0이면 기존값 유지)
-            if(total > 0) {
-                document.getElementById(`p${currentPIdx}_r${currentRIdx}`).value = total;
-            }
+                    let rankHtml = `
+                        <div class="round-winner-card">
+                            <p class="round-title">⛳ [${roundNames[rIndex]}] 우승자</p>
+                            <p>🏆 <strong>Net 챔피언 :</strong> ${netWinner.player} (Net ${netWinner.net}타)</p>
+                            <p>🥇 <strong>Gross 메달리스트 :</strong> ${grossWinner.player} (Gross ${grossWinner.gross}타)</p>
+                            <p class="all-ranks"><strong>전체 순위:</strong> ${ranksText}</p>
+                        </div>
+                    `;
+                    container.innerHTML += rankHtml;
+                }
+            });
 
-            calcScore();
-            closeHoleModal();
-        }
-
-        // 6. 경비 관리: 행 추가 기능
-        function addExpenseRow() {
-            const tbody = document.getElementById('expenseTbody');
-            const uniqueId = Date.now();
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" placeholder="MM/DD"></td>
-                <td><input type="text" placeholder="항목명" style="width:70px;"></td>
-                <td><input type="text" placeholder="금액"></td>
-                <td>
-                    <input type="file" accept="image/*" id="file_${uniqueId}" style="display:none;">
-                    <button class="receipt-btn" onclick="document.getElementById('file_${uniqueId}').click()">📷</button>
-                </td>
-                <td><input type="checkbox"></td>
-                <td><button class="del-btn" onclick="deleteExpenseRow(this)">❌</button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        // 7. 경비 관리: 행 삭제 기능
-        function deleteExpenseRow(btn) {
-            // 버튼이 속한 tr 요소를 찾아 삭제
-            const row = btn.closest('tr');
-            row.remove();
-        }
-
-        // 8. 코멘트 로컬 스토리지 저장 및 불러오기
-        function saveComments() {
-            const comments = document.getElementById('tripComments').value;
-            localStorage.setItem('fukuokaTripComments', comments);
-            alert('코멘트가 기기에 안전하게 저장되었습니다!');
-        }
-
-        function loadComments() {
-            const savedComments = localStorage.getItem('fukuokaTripComments');
-            if (savedComments) {
-                document.getElementById('tripComments').value = savedComments;
+            if (!hasAnyData) {
+                container.innerHTML += '<p><small>스코어를 입력하시면 실시간으로 라운드별 우승자와 순위가 계산되어 나타납니다.</small></p>';
             }
         }
+
+        // 스코어 로컬 스토리지에 저장하기
+        function saveScores() {
+            const dataToSave = {
+                roundNames: {
+                    r1: document.getElementById('name_r1').value,
+                    r2: document.getElementById('name_r2').value,
+                    r3: document.getElementById('name_r3').value,
+                    r4: document.getElementById('name_r4').value
+                }
+            };
+
+            players.forEach((player, index) => {
+                dataToSave[player] = {
+                    hcp: document.getElementById(`hcp_${index}`).value,
+                    r1: document.getElementById(`r1_${index}`).value,
+                    r2: document.getElementById(`r2_${index}`).value,
+                    r3: document.getElementById(`r3_${index}`).value,
+                    r4: document.getElementById(`r4_${index}`).value,
+                };
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+            alert('스코어와 라운드명이 현재 기기에 안전하게 저장되었습니다! 💾\n(공유가 필요할 땐 이 화면을 캡처해서 카톡으로 보내주세요.)');
+        }
+
+        // 페이지 로딩 시 초기화 실행
+        renderTable();
     </script>
 </body>
 </html>
